@@ -9,12 +9,17 @@ trait Selectable
         return 'name';
     }
 
-    public static function toSelect($placeholder = null)
+    public static function toSelect($placeholder = null, $key = null, $value = null)
     {
-        $key = ($instance = new static)->getKeyName();
-        $value = $instance->getSelectName();
+        $instance = new static;
+        $keyName = $key
+            ? $key
+            : $instance->getKeyName();
+        $valueName = $value
+            ? $value
+            : $instance->getSelectName();
 
-        $result = static::orderBy($value)->get()->pluck($value, $key);
+        $result = static::orderBy($valueName)->get()->pluck($valueName, $keyName);
 
         return $placeholder
             ? collect(['' => $placeholder])->union($result)
