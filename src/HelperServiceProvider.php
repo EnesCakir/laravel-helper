@@ -47,6 +47,20 @@ class HelperServiceProvider extends ServiceProvider
         Route::macro('approve', function ($name, $controller) {
             Route::as("{$name}.approve")->put("{$name}/{{$name}}/approve", "{$controller}@approve");
         });
+
+        Blueprint::macro('favorite', function ($tableName = 'users', $morphable = false) {
+            $this->timestamp('favorited_at')->nullable();
+            if ($morphable) {
+                $this->nullableMorphs('favorited_by');
+            } else {
+                $this->integer('favorited_by')->unsigned()->nullable();
+                $this->foreign('favorited_by')->references('id')->on($tableName);
+            }
+        });
+
+        Route::macro('favorite', function ($name, $controller) {
+            Route::as("{$name}.favorite")->put("{$name}/{{$name}}/favorite", "{$controller}@favorite");
+        });
     }
 
     public function register()
