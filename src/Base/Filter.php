@@ -45,10 +45,10 @@ abstract class Filter
         $this->builder = $builder;
         foreach ($this->getFilters() as $filter => $value) {
             $methodName = camel_case($filter);
-            if (method_exists($this->builder->getModel(), 'scope' . ucfirst($methodName))) {
-                $this->builder->$methodName($value);
-            } elseif (method_exists($this, $methodName)) {
+            if (method_exists($this, $methodName)) {
                 $this->$methodName($value);
+            } elseif (method_exists($this->builder->getModel(), 'scope' . ucfirst($methodName))) {
+                $this->builder->$methodName($value);
             } else {
                 $this->builder->where($filter, $value);
             }
