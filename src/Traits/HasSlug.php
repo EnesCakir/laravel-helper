@@ -21,7 +21,11 @@ trait HasSlug
 
     public function getSlugValues()
     {
-        return collect($this->attributes)->only($this->slugKeys);
+        $values = collect();
+        foreach ($this->slugKeys as $key) {
+            $values->push($this->attributes[$key]);
+        }
+        return $values;
     }
 
     public static function findBySlug($slug)
