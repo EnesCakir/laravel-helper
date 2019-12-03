@@ -15,10 +15,10 @@ class HelperServiceProvider extends ServiceProvider
                 $this->nullableMorphs('created_by');
                 $this->nullableMorphs('updated_by');
             } else {
-                $this->integer('created_by')->unsigned()->nullable();
+                $this->bigInteger('created_by')->unsigned()->nullable();
                 $this->foreign('created_by')->references('id')->on($tableName);
 
-                $this->integer('updated_by')->unsigned()->nullable();
+                $this->bigInteger('updated_by')->unsigned()->nullable();
                 $this->foreign('updated_by')->references('id')->on($tableName);
             }
 
@@ -26,7 +26,7 @@ class HelperServiceProvider extends ServiceProvider
                 if ($morphable) {
                     $this->nullableMorphs('deleted_by');
                 } else {
-                    $this->integer('deleted_by')->unsigned()->nullable();
+                    $this->bigInteger('deleted_by')->unsigned()->nullable();
                     $this->foreign('deleted_by')->references('id')->on($tableName);
                 }
                 $this->softDeletes();
@@ -39,7 +39,7 @@ class HelperServiceProvider extends ServiceProvider
             if ($morphable) {
                 $this->nullableMorphs('approved_by');
             } else {
-                $this->integer('approved_by')->unsigned()->nullable();
+                $this->bigInteger('approved_by')->unsigned()->nullable();
                 $this->foreign('approved_by')->references('id')->on($tableName);
             }
         });
@@ -53,7 +53,7 @@ class HelperServiceProvider extends ServiceProvider
             if ($morphable) {
                 $this->nullableMorphs('favorited_by');
             } else {
-                $this->integer('favorited_by')->unsigned()->nullable();
+                $this->bigInteger('favorited_by')->unsigned()->nullable();
                 $this->foreign('favorited_by')->references('id')->on($tableName);
             }
         });
