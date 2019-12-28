@@ -5,6 +5,7 @@ namespace EnesCakir\Helper;
 use Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Builder;
 
 class HelperServiceProvider extends ServiceProvider
 {
@@ -60,6 +61,30 @@ class HelperServiceProvider extends ServiceProvider
 
         Route::macro('favorite', function ($name, $controller) {
             Route::as("{$name}.favorite")->put("{$name}/{{$name}}/favorite", "{$controller}@favorite");
+        });
+
+        Builder::macro('safePaginate', function ($perPage = 25) {
+            $page = request('page');
+
+            $per = request()->filled('per_page')
+                ? request('per_page')
+                : $perPage;
+            $result = $this->paginate($per);
+
+            if ($page && $page != 1 && $page > $result->lastPage()) {
+                abort(
+                    redirect(
+                        request()->fullUrlWithQuery(
+                            array_merge(
+                                request()->all(),
+                                ['page' => $result->lastPage()]
+                            )
+                        )
+                    )
+                );
+            }
+
+            return $result;
         });
     }
 
