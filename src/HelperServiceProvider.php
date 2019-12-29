@@ -6,6 +6,7 @@ use Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class HelperServiceProvider extends ServiceProvider
 {
@@ -86,6 +87,31 @@ class HelperServiceProvider extends ServiceProvider
 
             return $result;
         });
+
+        HasManyThrough::macro('safePaginate', function ($perPage = 25) {
+            $page = request('page');
+
+            $per = request()->filled('per_page')
+                ? request('per_page')
+                : $perPage;
+            $result = $this->paginate($per);
+
+            if ($page && $page != 1 && $page > $result->lastPage()) {
+                abort(
+                    redirect(
+                        request()->fullUrlWithQuery(
+                            array_merge(
+                                request()->all(),
+                                ['page' => $result->lastPage()]
+                            )
+                        )
+                    )
+                );
+            }
+
+            return $result;
+        });
+
     }
 
     public function register()
