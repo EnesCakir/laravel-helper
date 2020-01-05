@@ -112,7 +112,7 @@ class HelperServiceProvider extends ServiceProvider
             return $result;
         });
 
-        Builder::macro('toSelect', function ($placeholder = null, $key = 'id', $value = 'name') {
+        Builder::macro('toSelect', function ($placeholder = null, $value = 'name', $key = 'id') {
             $result = static::orderBy($value)->get()->pluck($value, $key);
 
             return $placeholder
