@@ -3,7 +3,7 @@
   "description": "It includes basic helpers for Laravel Projects",
   "type": "library",
   "license": "MIT",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "authors": [
     {
       "name": "Enes Çakır",
