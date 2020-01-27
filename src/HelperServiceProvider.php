@@ -112,12 +112,23 @@ class HelperServiceProvider extends ServiceProvider
             return $result;
         });
 
-        Builder::macro('toSelect', function ($placeholder = null, $value = 'name', $key = 'id') {
-            $result = static::orderBy($value)->get()->pluck($value, $key);
+        Builder::macro('toSelect', function ($placeholder = null, $value = 'name', $key = 'id', $order = null) {
+            $order = $order ?: $value;
+            $result = static::orderBy($order)->get()->pluck($value, $key);
 
             return $placeholder
                 ? collect(['' => $placeholder])->union($result)
                 : $result;
+        });
+
+        Builder::macro('download', function ($name, $mapper = null) {
+            $elements = $this->get();
+
+            if (is_callable($mapper)) {
+                $elements = $elements->map($mapper);
+            }
+
+            abort($elements->downloadExcel("{$name}.xlsx", null, true));
         });
     }
 
